@@ -1,0 +1,22 @@
+name: Android build
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: android-actions/setup-android@v3
+      - run: sdkmanager 'platforms;android-37.0' 'build-tools;37.0.0'
+      - uses: gradle/actions/setup-gradle@v4
+      - run: sh scripts/test-core.sh
+      - run: ./gradlew :app:assembleRelease :app:lintRelease
+      - uses: actions/upload-artifact@v4
+        with:
+          name: unsigned-release-requires-local-signing
+          path: app/build/outputs/apk/release/app-release-unsigned.apk
