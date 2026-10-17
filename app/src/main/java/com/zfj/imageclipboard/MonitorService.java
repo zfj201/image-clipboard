@@ -64,7 +64,7 @@ public final class MonitorService extends Service {
     private synchronized void scheduleScan(){
         if(closing||scanner==null||scanner.isShutdown())return;
         if(scheduledScan!=null&&!scheduledScan.isDone())return;
-        scheduledScan=scanner.schedule(this::scanSafely,600,TimeUnit.MILLISECONDS);
+        scheduledScan=scanner.schedule(this::scanSafely,150,TimeUnit.MILLISECONDS);
     }
     private boolean mediaPermission(){return checkSelfPermission(Build.VERSION.SDK_INT>=33?Manifest.permission.READ_MEDIA_IMAGES:Manifest.permission.READ_EXTERNAL_STORAGE)==PackageManager.PERMISSION_GRANTED;}
     private void scanSafely(){

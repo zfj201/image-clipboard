@@ -35,7 +35,7 @@ final class PicturePipeline {
         if(rejection!=null){record(c.source,"忽略",rejection,null,null);return;}
         if(!c.explicit && c.time<settings.since()-1500)return;
         ScheduledFuture<?> previous=waiting.remove(c.source); if(previous!=null)previous.cancel(false);
-        waiting.put(c.source,worker.schedule(()->process(c),c.explicit?0:900,TimeUnit.MILLISECONDS));
+        waiting.put(c.source,worker.schedule(()->process(c),c.explicit?0:250,TimeUnit.MILLISECONDS));
     }
     void close(){closed=true;worker.shutdownNow();main.removeCallbacksAndMessages(null);}
     private void process(Candidate c) {
